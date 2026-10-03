@@ -9,6 +9,10 @@ pub async fn launch_game(app: AppHandle, vanilla: bool, args: Option<String>) ->
         sync::pull_profile(false, &app).await?;
     }
 
+    if !vanilla {
+        crate::rounds::prepare(&app).await?;
+    }
+
     let prefs = app.lock_prefs();
     let manager = app.lock_manager();
 
