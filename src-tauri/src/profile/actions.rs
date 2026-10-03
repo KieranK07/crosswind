@@ -468,6 +468,10 @@ impl ManagedGame {
         let shortcut_path =
             desktop_path.join(format!("gale-{}-{}.desktop", self.game.name, profile.name));
 
+        #[cfg(target_os = "macos")]
+        let shortcut_path =
+            desktop_path.join(format!("Gale - {} - {}.command", self.game.name, profile.name));
+
         if shortcut_path.exists() {
             bail!("shortcut already exists");
         }
@@ -533,6 +537,24 @@ impl ManagedGame {
 
             std::fs::set_permissions(&shortcut_path, PermissionsExt::from_mode(0o755))
                 .context("failed to set permissions on desktop file")?;
+        }
+
+        // A .command file opens in Terminal, which closes once Gale has started the game.
+        #[cfg(target_os = "macos")]
+        {
+            use std::os::unix::fs::PermissionsExt;
+
+            let content = format!(
+                "#!/bin/sh\nexec {} --game {} --profile {} --launch --no-gui\n",
+                shell_words::quote(&command),
+                shell_words::quote(&self.game.slug),
+                shell_words::quote(&profile.name)
+            );
+
+            std::fs::write(&shortcut_path, content).context("failed to write shortcut")?;
+
+            std::fs::set_permissions(&shortcut_path, PermissionsExt::from_mode(0o755))
+                .context("failed to set permissions on shortcut")?;
         }
 
         Ok(())

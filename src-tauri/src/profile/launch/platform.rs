@@ -87,6 +87,26 @@ fn read_steam_registry() -> Result<PathBuf> {
     Ok(PathBuf::from(path))
 }
 
+#[cfg(target_os = "macos")]
+fn create_base_steam_command() -> Result<Command> {
+    use crate::util::fs::PathExt;
+
+    let app = ["/Applications/Steam.app".into()]
+        .into_iter()
+        .chain(dirs_next::home_dir().map(|home| home.join("Applications/Steam.app")))
+        .find(|path: &PathBuf| path.exists())
+        .ok_or_eyre("failed to find Steam.app in /Applications or ~/Applications")?;
+
+    let path = app
+        .join("Contents/MacOS/steam_osx")
+        .exists_or_none()
+        .ok_or_eyre("Steam.app has no steam_osx executable")?;
+
+    info!("using steam at {}", path.display());
+
+    Ok(Command::new(path))
+}
+
 #[cfg(target_os = "linux")]
 fn create_base_steam_command() -> Result<Command> {
     use crate::util::fs::PathExt;

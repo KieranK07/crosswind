@@ -15,7 +15,7 @@ use walkdir::WalkDir;
 
 use super::ManagedGame;
 use crate::{
-    game::Game,
+    game::{Game, mod_loader::ModLoaderKind},
     logger::log_webview_err,
     prefs::{GamePrefs, Prefs},
     util::{
@@ -27,6 +27,8 @@ use crate::{
 mod custom_args;
 #[cfg(target_os = "linux")]
 mod linux;
+#[cfg(target_os = "macos")]
+mod macos;
 mod mod_loader;
 mod platform;
 
@@ -81,7 +83,10 @@ impl ManagedGame {
         let game_dir =
             locate_game_dir(self.game, prefs).context("failed to locate game directory")?;
 
-        if let Err(err) = self.copy_required_files(&game_dir) {
+        // On macOS Doorstop is injected from the profile; nothing goes into the game directory.
+        if !cfg!(target_os = "macos")
+            && let Err(err) = self.copy_required_files(&game_dir)
+        {
             warn!("failed to copy required files to game directory: {:#}", err);
         }
 
@@ -122,6 +127,15 @@ impl ManagedGame {
         // if the game has a platform but the setting is unset, fill it in
         platform = platform.or_else(|| self.game.platforms.iter().next());
 
+        // Steam can't pass Doorstop's environment to the game on macOS, so the game is always
+        // started directly there.
+        #[cfg(target_os = "macos")]
+        let mut command = {
+            let _ = platform;
+            macos::game_command(game_dir, self.game)?
+        };
+
+        #[cfg(not(target_os = "macos"))]
         let mut command = match (&launch_mode, platform) {
             // If the setting is `Launcher` and we have a platform, use the platform-specific
             // launch command (if there is one). Otherwise, fall back to direct execution.
@@ -159,21 +173,38 @@ impl ManagedGame {
                 is_proton
             };
 
-            #[cfg(target_os = "windows")]
+            #[cfg(not(target_os = "linux"))]
             let is_proton = false;
 
             if is_proton {
                 info!("game appears to be running under proton, using proton launch method");
             }
 
-            let mut ctx = mod_loader::ArgsContext::new(&mut command, &profile.path, is_proton);
-            ctx.add_args(&self.game.mod_loader)?;
+            #[cfg(target_os = "macos")]
+            if matches!(self.game.mod_loader.kind, ModLoaderKind::BepInEx { .. }) {
+                macos::prepare_profile(&profile.path)
+                    .context("failed to install the macOS BepInEx files")?;
+                macos::add_doorstop_env(&mut command, &profile.path)?;
+            } else {
+                warn!(
+                    "{} isn't supported on macOS; launching with its usual arguments",
+                    self.game.mod_loader.as_str()
+                );
+                let mut ctx = mod_loader::ArgsContext::new(&mut command, &profile.path, is_proton);
+                ctx.add_args(&self.game.mod_loader)?;
+            }
+
+            #[cfg(not(target_os = "macos"))]
+            {
+                let mut ctx = mod_loader::ArgsContext::new(&mut command, &profile.path, is_proton);
+                ctx.add_args(&self.game.mod_loader)?;
+            }
         }
 
         custom_args::add_args(&mut command, game_custom_args)?;
         custom_args::add_args(&mut command, &profile.custom_args)?;
 
-        if matches!(launch_mode, LaunchMode::Direct { .. }) {
+        if matches!(launch_mode, LaunchMode::Direct { .. }) || cfg!(target_os = "macos") {
             command.current_dir(game_dir);
         }
 

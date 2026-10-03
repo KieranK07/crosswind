@@ -30,3 +30,8 @@ pub async fn system_accent() -> Result<Option<Color>> {
 
     Ok(Some(Color(color.R, color.G, color.B, 255)))
 }
+
+#[cfg(target_os = "macos")]
+pub async fn system_accent() -> Result<Option<Color>> {
+    Ok(None)
+}
