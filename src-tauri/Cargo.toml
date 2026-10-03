@@ -56,6 +56,7 @@ chrono = { version = "0.4", features = ["serde"] }
 keyring = { version = "3", features = [
     "windows-native",
     "linux-native-sync-persistent",
+    "apple-native",
 ] }
 dirs-next = "2"
 trash = "5"
