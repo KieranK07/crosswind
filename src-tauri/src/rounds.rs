@@ -4,17 +4,21 @@
 //! RoundsWithFriends 2 that most mods depend on. Before a modded launch this brings the profile's files
 //! up to date, leaving the installed packages (and so dependency resolution) as they are:
 //!
-//! - the old UnboundLib, MMHook and RoundsWithFriends files are swapped for Bknibb's ports, downloaded
-//!   from GitHub and checked by SHA-256;
+//! - files from the old UnboundLib, MMHook and RoundsWithFriends releases are swapped for Bknibb's
+//!   ports, downloaded from GitHub and checked by SHA-256;
 //! - exact mod versions that need hand-made fixes get the rounds-mac-modpack's binary patches;
 //! - BepInEx's `HideManagerGameObject` is turned on (otherwise the game destroys plugin objects);
 //! - rounds-port AutoFix goes into patchers: it fixes the other old mods while BepInEx starts;
-//! - Mac Compat Fixes and the Odin Serializer stand-in go into plugins.
+//! - rounds-port Runtime (in-game fixes, no UI) and the Odin Serializer stand-in go into plugins.
+//!
+//! Whatever a Thunderstore package provides wins: only files recognised as old releases are replaced,
+//! and this layer's own copies are removed once a package brings the same file (a community port of
+//! UnboundLib, say).
 //!
 //! Files are replaced, never written through, because profile files are hard links into Gale's cache.
 
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     fs,
     io::Read,
     path::{Path, PathBuf},
@@ -61,56 +65,40 @@ const RWF: Download = Download {
     sha256: "1bd4d5aa47de0e04661710a77bb0b5f1214dac4b3baabc9364b3418ecbc8ab61",
 };
 
-enum Source {
-    Download(&'static Download),
-    /// A file shipped with Gale, under `resources/rounds/files`.
-    Bundled(&'static str, &'static str),
+/// Bknibb's port of a library, put in place of a file from the library's old releases.
+struct Library {
+    port: &'static Download,
+    /// Files that come with the port, put next to it.
+    with: &'static [&'static Download],
 }
 
-impl Source {
-    fn name(&self) -> &'static str {
-        match self {
-            Source::Download(download) => download.name,
-            Source::Bundled(name, _) => name,
-        }
-    }
-}
+const LIBRARIES: &[Library] = &[
+    Library { port: &UNBOUNDLIB, with: &[&OCTOKIT] },
+    Library { port: &MMHOOK, with: &[] },
+    Library { port: &RWF, with: &[] },
+];
 
-/// Files put into a package's folder in `BepInEx/plugins` when that package is installed.
-const PACKAGE_FILES: &[(&[&str], &[Source])] = &[
-    (
-        &["willis81808-UnboundLib", "olavim-UnboundLib"],
-        &[Source::Download(&UNBOUNDLIB), Source::Download(&OCTOKIT)],
-    ),
-    (&["willis81808-MMHook"], &[Source::Download(&MMHOOK)]),
-    (&["olavim-RoundsWithFriends"], &[Source::Download(&RWF)]),
+/// A file shipped with Gale, under `resources/rounds/files`: (folder in the profile, file name, path).
+const PROFILE_FILES: &[(&str, &str, &str)] = &[
+    // rounds-port AutoFix: fixes the remaining old mods while BepInEx starts
+    ("BepInEx/patchers/rounds-port-AutoFix", "rounds-port.AutoFix.dll", "rounds-port.AutoFix.dll"),
+    // rounds-port Runtime: in-game fixes for the current build, no UI
+    ("BepInEx/plugins/rounds-port-Runtime", "rounds-port.Runtime.dll", "rounds-port.Runtime.dll"),
+    // The game no longer ships Odin Serializer; MapsExtended, WillsWackyCards and others use it.
+    // This is the Apache-2.0 open-source version.
+    (ODIN, "Sirenix.Serialization.dll", "odin/Sirenix.Serialization.dll"),
+    (ODIN, "Sirenix.Serialization.Config.dll", "odin/Sirenix.Serialization.Config.dll"),
+    (ODIN, "Sirenix.Utilities.dll", "odin/Sirenix.Utilities.dll"),
+    (ODIN, "LICENSE.txt", "odin/Sirenix-OdinSerializer-LICENSE.txt"),
 ];
 
 const ODIN: &str = "BepInEx/plugins/OdinSerializer";
-
-/// Files every ROUNDS profile gets, relative to the profile.
-const PROFILE_FILES: &[(&str, Source)] = &[
-    // rounds-port AutoFix: fixes the remaining old mods while BepInEx starts
-    (
-        "BepInEx/patchers/RoundsPort-AutoFix",
-        Source::Bundled("rounds-port.AutoFix.dll", "rounds-port.AutoFix.dll"),
-    ),
-    (
-        "BepInEx/plugins/RoundsMacModpack-MacCompatFixes",
-        Source::Bundled("MacCompatFixes.dll", "MacCompatFixes.dll"),
-    ),
-    // The game no longer ships Odin Serializer; MapsExtended, WillsWackyCards and others use it.
-    // This is the Apache-2.0 open-source version.
-    (ODIN, Source::Bundled("Sirenix.Serialization.dll", "odin/Sirenix.Serialization.dll")),
-    (ODIN, Source::Bundled("Sirenix.Serialization.Config.dll", "odin/Sirenix.Serialization.Config.dll")),
-    (ODIN, Source::Bundled("Sirenix.Utilities.dll", "odin/Sirenix.Utilities.dll")),
-    (ODIN, Source::Bundled("LICENSE.txt", "odin/Sirenix-OdinSerializer-LICENSE.txt")),
-];
 
 /// Folders earlier builds of this layer installed, removed from profiles.
 const REMOVED_DIRS: &[&str] = &[
     "BepInEx/plugins/RoundsMacModpack-MacCompatFixes",
     "BepInEx/plugins/RoundsMacModpack-OdinSerializer",
+    "BepInEx/patchers/RoundsPort-AutoFix",
 ];
 
 /// A binary patch from the rounds-mac-modpack, for one exact file.
@@ -141,6 +129,18 @@ fn patches() -> Vec<Patch> {
         .collect()
 }
 
+/// Hashes of every UnboundLib.dll, MMHOOK_Assembly-CSharp.dll and RoundsWithFriends.dll in the old
+/// Thunderstore releases (willis81808/olavim UnboundLib, MMHook, RoundsWithFriends).
+fn old_releases() -> HashSet<String> {
+    FILES
+        .get_file("old-libraries.tsv")
+        .and_then(|file| file.contents_utf8())
+        .unwrap_or_default()
+        .lines()
+        .filter_map(|line| line.split('\t').nth(1).map(str::to_string))
+        .collect()
+}
+
 /// Brings the active ROUNDS profile up to date. Does nothing for other games.
 pub async fn prepare(app: &AppHandle) -> Result<()> {
     let profile_dir = {
@@ -155,34 +155,68 @@ pub async fn prepare(app: &AppHandle) -> Result<()> {
     update_profile(&profile_dir, app.http()).await.map(|_| ())
 }
 
+/// What to do with one library's files.
+#[derive(Default)]
+struct LibraryPlan {
+    /// Old release to replace with the port.
+    replace: Option<PathBuf>,
+    /// Old releases, or this layer's copies, to remove.
+    remove: Vec<PathBuf>,
+    /// Folder of the port, for the files that come with it.
+    port_dir: Option<PathBuf>,
+}
+
+fn plan_library(lib: &Library, files: &[PathBuf], old: &HashSet<String>, patches: &[Patch]) -> Result<LibraryPlan> {
+    let ours: Vec<&str> = std::iter::once(lib.port.sha256)
+        .chain(patches.iter().filter(|p| p.before == lib.port.sha256).map(|p| p.after.as_str()))
+        .collect();
+
+    let (mut olds, mut own, mut others) = (Vec::new(), Vec::new(), Vec::new());
+    for path in files.iter().filter(|path| util::fs::file_name_owned(path).eq_ignore_ascii_case(lib.port.name)) {
+        let hash = sha256(&fs::read(path)?);
+        if old.contains(&hash) {
+            olds.push(path.clone());
+        } else if ours.contains(&hash.as_str()) {
+            own.push(path.clone());
+        } else {
+            others.push(path.clone());
+        }
+    }
+
+    let mut plan = LibraryPlan::default();
+    if !others.is_empty() {
+        // A package provides a newer copy: it wins.
+        plan.remove = olds.into_iter().chain(own).collect();
+    } else if let Some(first) = own.first() {
+        plan.port_dir = first.parent().map(Path::to_path_buf);
+        plan.remove = olds.into_iter().chain(own.into_iter().skip(1)).collect();
+    } else if !olds.is_empty() {
+        let first = olds.remove(0);
+        plan.port_dir = first.parent().map(Path::to_path_buf);
+        plan.replace = Some(first);
+        plan.remove = olds;
+    }
+
+    Ok(plan)
+}
+
+/// Whether a file of this name is in BepInEx/plugins or BepInEx/patchers outside `own_dir`.
+fn provided_elsewhere(profile_dir: &Path, name: &str, own_dir: &Path) -> bool {
+    ["BepInEx/plugins", "BepInEx/patchers"].iter().any(|dir| {
+        plugin_files(&profile_dir.join(dir)).iter().any(|path| {
+            !path.starts_with(own_dir) && util::fs::file_name_owned(path).eq_ignore_ascii_case(name)
+        })
+    })
+}
+
 /// Returns what changed.
 async fn update_profile(
     profile_dir: &Path,
     http: &reqwest_middleware::ClientWithMiddleware,
 ) -> Result<Vec<String>> {
-
     let plugins = profile_dir.join("BepInEx/plugins");
-    let packages: Vec<_> = PACKAGE_FILES
-        .iter()
-        .filter(|(names, _)| names.iter().any(|name| plugins.join(name).is_dir()))
-        .collect();
-
-    // Download what's missing first, so nothing is changed if a download fails.
-    let mut downloaded = HashMap::new();
-    let needed = packages
-        .iter()
-        .flat_map(|(_, sources)| sources.iter())
-        .chain(PROFILE_FILES.iter().map(|(_, source)| source));
-    for source in needed {
-        if let Source::Download(download) = source
-            && !downloaded.contains_key(download.name)
-        {
-            let bytes = fetch(http, download).await?;
-            downloaded.insert(download.name, bytes);
-        }
-    }
-
     let patches = patches();
+    let old = old_releases();
     let mut changed = Vec::new();
 
     for dir in REMOVED_DIRS {
@@ -193,22 +227,66 @@ async fn update_profile(
         }
     }
 
-    for (names, sources) in packages {
-        for name in names.iter().filter(|name| plugins.join(name).is_dir()) {
-            for source in sources.iter() {
-                let path = plugins.join(name).join(source.name());
-                let bytes = contents(source, &downloaded)?;
-                if put(&path, bytes, &patches)? {
-                    changed.push(format!("{name}/{}", source.name()));
+    let files = plugin_files(&plugins);
+    let plans: Vec<_> = LIBRARIES
+        .iter()
+        .map(|lib| plan_library(lib, &files, &old, &patches).map(|plan| (lib, plan)))
+        .collect::<Result<_>>()?;
+
+    // Download what's needed first, so nothing is changed if a download fails.
+    let mut downloaded = HashMap::new();
+    for (lib, plan) in &plans {
+        let mut needed = Vec::new();
+        if plan.replace.is_some() {
+            needed.push(lib.port);
+        }
+        if let Some(dir) = &plan.port_dir {
+            for with in lib.with {
+                let current = fs::read(dir.join(with.name)).map(|bytes| sha256(&bytes));
+                if current.ok().as_deref() != Some(with.sha256) {
+                    needed.push(with);
+                }
+            }
+        }
+        for download in needed {
+            if !downloaded.contains_key(download.name) {
+                downloaded.insert(download.name, fetch(http, download).await?);
+            }
+        }
+    }
+
+    for (lib, plan) in &plans {
+        for path in &plan.remove {
+            fs::remove_file(path).with_context(|| format!("failed to remove {}", path.display()))?;
+            changed.push(format!("removed {}", path.display()));
+        }
+        if let Some(path) = &plan.replace {
+            replace(path, &downloaded[lib.port.name])?;
+            changed.push(format!("{} -> Bknibb's port", path.display()));
+        }
+        if let Some(dir) = &plan.port_dir {
+            for with in lib.with {
+                if let Some(bytes) = downloaded.get(with.name) {
+                    replace(&dir.join(with.name), bytes)?;
+                    changed.push(format!("{}/{}", dir.display(), with.name));
                 }
             }
         }
     }
 
-    for (dir, source) in PROFILE_FILES {
-        let path = profile_dir.join(dir).join(source.name());
-        if put(&path, contents(source, &downloaded)?, &patches)? {
-            changed.push(format!("{dir}/{}", source.name()));
+    for (dir, name, path) in PROFILE_FILES {
+        let own_dir = profile_dir.join(dir);
+        let dest = own_dir.join(name);
+        if provided_elsewhere(profile_dir, name, &own_dir) {
+            // a package brings its own copy
+            if dest.exists() {
+                fs::remove_file(&dest)?;
+                changed.push(format!("removed {dir}/{name}: a package provides it"));
+            }
+            continue;
+        }
+        if put(&dest, bundled(path)?, &patches)? {
+            changed.push(format!("{dir}/{name}"));
         }
     }
 
@@ -220,7 +298,7 @@ async fn update_profile(
         }
     }
 
-    if set_hide_manager(&profile_dir)? {
+    if set_hide_manager(profile_dir)? {
         changed.push("BepInEx.cfg: HideManagerGameObject = true".into());
     }
 
@@ -233,13 +311,10 @@ async fn update_profile(
     Ok(changed)
 }
 
-fn contents<'a>(source: &Source, downloaded: &'a HashMap<&str, Vec<u8>>) -> Result<&'a [u8]> {
-    match source {
-        Source::Download(download) => Ok(&downloaded[download.name]),
-        Source::Bundled(_, path) => match FILES.get_file(format!("files/{path}")) {
-            Some(file) => Ok(file.contents()),
-            None => bail!("{path} is missing from the app"),
-        },
+fn bundled(path: &str) -> Result<&'static [u8]> {
+    match FILES.get_file(format!("files/{path}")) {
+        Some(file) => Ok(file.contents()),
+        None => bail!("{path} is missing from the app"),
     }
 }
 
@@ -410,6 +485,40 @@ mod tests {
         println!("{} changes", changed.len());
     }
 
+    /// Packages that bring their own copies win. Run after `updates_a_thunderstore_profile`, on the same
+    /// profile (it changes it).
+    #[tokio::test]
+    #[ignore]
+    async fn packages_win() {
+        let dir = PathBuf::from(std::env::var("ROUNDS_TEST_PROFILE").expect("ROUNDS_TEST_PROFILE"));
+        let http = reqwest_middleware::ClientBuilder::new(reqwest::Client::new()).build();
+        let plugins = dir.join("BepInEx/plugins");
+        update_profile(&dir, &http).await.unwrap();
+
+        // a community UnboundLib package (any build that isn't an old release or ours)
+        let mut community = fs::read(plugins.join("willis81808-UnboundLib/UnboundLib.dll")).unwrap();
+        community.push(0);
+        fs::create_dir_all(plugins.join("Community-UnboundLib")).unwrap();
+        fs::write(plugins.join("Community-UnboundLib/UnboundLib.dll"), &community).unwrap();
+        // the same fix uploaded as a new version of the old package
+        fs::write(plugins.join("olavim-RoundsWithFriends/RoundsWithFriends.dll"), b"new upload").unwrap();
+        // someone else's AutoFix package
+        fs::create_dir_all(dir.join("BepInEx/patchers/Someone-AutoFix")).unwrap();
+        fs::write(dir.join("BepInEx/patchers/Someone-AutoFix/rounds-port.AutoFix.dll"), b"theirs").unwrap();
+
+        let changed = update_profile(&dir, &http).await.unwrap();
+        println!("with packages:\n  {}", changed.join("\n  "));
+
+        assert!(!plugins.join("willis81808-UnboundLib/UnboundLib.dll").exists());
+        assert_eq!(fs::read(plugins.join("Community-UnboundLib/UnboundLib.dll")).unwrap(), community);
+        assert_eq!(fs::read(plugins.join("olavim-RoundsWithFriends/RoundsWithFriends.dll")).unwrap(), b"new upload");
+        assert!(!dir.join("BepInEx/patchers/rounds-port-AutoFix/rounds-port.AutoFix.dll").exists());
+        assert_eq!(fs::read(dir.join("BepInEx/patchers/Someone-AutoFix/rounds-port.AutoFix.dll")).unwrap(), b"theirs");
+
+        let again = update_profile(&dir, &http).await.unwrap();
+        assert!(again.is_empty(), "second run changed: {again:?}");
+    }
+
     /// Runs against a profile made by `scripts/rounds-test-profile.sh` (needs the network once):
     /// `ROUNDS_TEST_PROFILE=<dir> cargo test rounds -- --ignored --nocapture`
     #[tokio::test]
@@ -429,8 +538,8 @@ mod tests {
         assert_eq!(sha("willis81808-MMHook/MMHOOK_Assembly-CSharp.dll"), MMHOOK.sha256);
         assert_eq!(sha("olavim-RoundsWithFriends/RoundsWithFriends.dll"), RWF.sha256);
         assert!(plugins.join("OdinSerializer/Sirenix.Serialization.dll").is_file());
-        assert!(dir.join("BepInEx/patchers/RoundsPort-AutoFix/rounds-port.AutoFix.dll").is_file());
-        assert!(plugins.join("RoundsMacModpack-MacCompatFixes/MacCompatFixes.dll").is_file());
+        assert!(dir.join("BepInEx/patchers/rounds-port-AutoFix/rounds-port.AutoFix.dll").is_file());
+        assert!(plugins.join("rounds-port-Runtime/rounds-port.Runtime.dll").is_file());
 
         // every modpack patch whose original is in the profile was applied
         for patch in patches() {
