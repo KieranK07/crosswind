@@ -385,6 +385,17 @@ fn sha256(bytes: &[u8]) -> String {
 mod tests {
     use super::*;
 
+    /// Brings any profile folder up to date, for the in-game test bench:
+    /// `ROUNDS_PREPARE_DIR=<dir> cargo test --lib prepare_dir -- --ignored`
+    #[tokio::test]
+    #[ignore]
+    async fn prepare_dir() {
+        let dir = PathBuf::from(std::env::var("ROUNDS_PREPARE_DIR").expect("ROUNDS_PREPARE_DIR"));
+        let http = reqwest_middleware::ClientBuilder::new(reqwest::Client::new()).build();
+        let changed = update_profile(&dir, &http).await.unwrap();
+        println!("{} changes", changed.len());
+    }
+
     /// Runs against a profile made by `scripts/rounds-test-profile.sh` (needs the network once):
     /// `ROUNDS_TEST_PROFILE=<dir> cargo test rounds -- --ignored --nocapture`
     #[tokio::test]
