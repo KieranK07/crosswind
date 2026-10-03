@@ -7,9 +7,9 @@
 //! - the old UnboundLib, MMHook and RoundsWithFriends files are swapped for Bknibb's ports, downloaded
 //!   from GitHub and checked by SHA-256;
 //! - exact mod versions that need hand-made fixes get the rounds-mac-modpack's binary patches;
-//! - MapsExtended gets the Odin Serializer stand-in it needs;
 //! - BepInEx's `HideManagerGameObject` is turned on (otherwise the game destroys plugin objects);
-//! - Mac Compat Fixes goes into plugins.
+//! - rounds-port AutoFix goes into patchers: it fixes the other old mods while BepInEx starts;
+//! - Mac Compat Fixes and the Odin Serializer stand-in go into plugins.
 //!
 //! Files are replaced, never written through, because profile files are hard links into Gale's cache.
 
@@ -84,22 +84,28 @@ const PACKAGE_FILES: &[(&[&str], &[Source])] = &[
     ),
     (&["willis81808-MMHook"], &[Source::Download(&MMHOOK)]),
     (&["olavim-RoundsWithFriends"], &[Source::Download(&RWF)]),
-    (
-        &["olavim-MapsExtended"],
-        &[
-            Source::Bundled("Sirenix.Serialization.dll", "odin/Sirenix.Serialization.dll"),
-            Source::Bundled("Sirenix.Serialization.Config.dll", "odin/Sirenix.Serialization.Config.dll"),
-            Source::Bundled("Sirenix.Utilities.dll", "odin/Sirenix.Utilities.dll"),
-            Source::Bundled("Sirenix-OdinSerializer-LICENSE.txt", "odin/Sirenix-OdinSerializer-LICENSE.txt"),
-        ],
-    ),
 ];
 
+const ODIN: &str = "BepInEx/plugins/RoundsMacModpack-OdinSerializer";
+
 /// Files every ROUNDS profile gets, relative to the profile.
-const PROFILE_FILES: &[(&str, Source)] = &[(
-    "BepInEx/plugins/RoundsMacModpack-MacCompatFixes",
-    Source::Bundled("MacCompatFixes.dll", "MacCompatFixes.dll"),
-)];
+const PROFILE_FILES: &[(&str, Source)] = &[
+    // rounds-port AutoFix: fixes the remaining old mods while BepInEx starts
+    (
+        "BepInEx/patchers/RoundsPort-AutoFix",
+        Source::Bundled("rounds-port.AutoFix.dll", "rounds-port.AutoFix.dll"),
+    ),
+    (
+        "BepInEx/plugins/RoundsMacModpack-MacCompatFixes",
+        Source::Bundled("MacCompatFixes.dll", "MacCompatFixes.dll"),
+    ),
+    // The game no longer ships Odin Serializer; MapsExtended, WillsWackyCards and others use it.
+    // This is the Apache-2.0 open-source version.
+    (ODIN, Source::Bundled("Sirenix.Serialization.dll", "odin/Sirenix.Serialization.dll")),
+    (ODIN, Source::Bundled("Sirenix.Serialization.Config.dll", "odin/Sirenix.Serialization.Config.dll")),
+    (ODIN, Source::Bundled("Sirenix.Utilities.dll", "odin/Sirenix.Utilities.dll")),
+    (ODIN, Source::Bundled("LICENSE.txt", "odin/Sirenix-OdinSerializer-LICENSE.txt")),
+];
 
 /// A binary patch from the rounds-mac-modpack, for one exact file.
 struct Patch {
@@ -397,7 +403,8 @@ mod tests {
         assert_eq!(sha("willis81808-UnboundLib/Octokit.dll"), OCTOKIT.sha256);
         assert_eq!(sha("willis81808-MMHook/MMHOOK_Assembly-CSharp.dll"), MMHOOK.sha256);
         assert_eq!(sha("olavim-RoundsWithFriends/RoundsWithFriends.dll"), RWF.sha256);
-        assert!(plugins.join("olavim-MapsExtended/Sirenix.Serialization.dll").is_file());
+        assert!(plugins.join("RoundsMacModpack-OdinSerializer/Sirenix.Serialization.dll").is_file());
+        assert!(dir.join("BepInEx/patchers/RoundsPort-AutoFix/rounds-port.AutoFix.dll").is_file());
         assert!(plugins.join("RoundsMacModpack-MacCompatFixes/MacCompatFixes.dll").is_file());
 
         // every modpack patch whose original is in the profile was applied
