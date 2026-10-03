@@ -86,7 +86,7 @@ const PACKAGE_FILES: &[(&[&str], &[Source])] = &[
     (&["olavim-RoundsWithFriends"], &[Source::Download(&RWF)]),
 ];
 
-const ODIN: &str = "BepInEx/plugins/RoundsMacModpack-OdinSerializer";
+const ODIN: &str = "BepInEx/plugins/OdinSerializer";
 
 /// Files every ROUNDS profile gets, relative to the profile.
 const PROFILE_FILES: &[(&str, Source)] = &[
@@ -105,6 +105,12 @@ const PROFILE_FILES: &[(&str, Source)] = &[
     (ODIN, Source::Bundled("Sirenix.Serialization.Config.dll", "odin/Sirenix.Serialization.Config.dll")),
     (ODIN, Source::Bundled("Sirenix.Utilities.dll", "odin/Sirenix.Utilities.dll")),
     (ODIN, Source::Bundled("LICENSE.txt", "odin/Sirenix-OdinSerializer-LICENSE.txt")),
+];
+
+/// Folders earlier builds of this layer installed, removed from profiles.
+const REMOVED_DIRS: &[&str] = &[
+    "BepInEx/plugins/RoundsMacModpack-MacCompatFixes",
+    "BepInEx/plugins/RoundsMacModpack-OdinSerializer",
 ];
 
 /// A binary patch from the rounds-mac-modpack, for one exact file.
@@ -178,6 +184,14 @@ async fn update_profile(
 
     let patches = patches();
     let mut changed = Vec::new();
+
+    for dir in REMOVED_DIRS {
+        let path = profile_dir.join(dir);
+        if path.is_dir() {
+            fs::remove_dir_all(&path).with_context(|| format!("failed to remove {}", path.display()))?;
+            changed.push(format!("removed {dir}"));
+        }
+    }
 
     for (names, sources) in packages {
         for name in names.iter().filter(|name| plugins.join(name).is_dir()) {
@@ -414,7 +428,7 @@ mod tests {
         assert_eq!(sha("willis81808-UnboundLib/Octokit.dll"), OCTOKIT.sha256);
         assert_eq!(sha("willis81808-MMHook/MMHOOK_Assembly-CSharp.dll"), MMHOOK.sha256);
         assert_eq!(sha("olavim-RoundsWithFriends/RoundsWithFriends.dll"), RWF.sha256);
-        assert!(plugins.join("RoundsMacModpack-OdinSerializer/Sirenix.Serialization.dll").is_file());
+        assert!(plugins.join("OdinSerializer/Sirenix.Serialization.dll").is_file());
         assert!(dir.join("BepInEx/patchers/RoundsPort-AutoFix/rounds-port.AutoFix.dll").is_file());
         assert!(plugins.join("RoundsMacModpack-MacCompatFixes/MacCompatFixes.dll").is_file());
 
