@@ -6,6 +6,16 @@
 
 A powerful mod manager for [Thunderstore](https://thunderstore.io), built with [Svelte](https://kit.svelte.dev/) and [Tauri](https://tauri.app/).
 
+## This fork: macOS and ROUNDS
+
+Gale with macOS support, built for ROUNDS on Apple Silicon.
+
+- Launches native Mac games with BepInEx: Doorstop 4.6 and a BepInEx core that runs natively on Apple Silicon ship with the app.
+- ROUNDS profiles are updated for the current game before each launch: Bknibb's UnboundLib 4 and RoundsWithFriends 3 replace the old Thunderstore versions, and hand-made patches from [rounds-mac-modpack](https://github.com/KieranK07/rounds-mac-modpack) are applied to the mod versions they fix.
+- Steam must be running. The game starts directly, not through Steam.
+
+Build: `pnpm install && pnpm tauri build --bundles app`
+
 ## Features
 
 - Support for 150+ games on Thunderstore and Hexium, including Lethal Company, R.E.P.O and Risk Of Rain 2
