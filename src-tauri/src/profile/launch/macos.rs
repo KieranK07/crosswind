@@ -73,6 +73,16 @@ pub fn game_command(game_dir: &Path, game: Game) -> Result<Command> {
     command.current_dir(game_dir);
 
     if let Some(steam) = &game.platforms.steam {
+        // A game started outside Steam can't reach Steam unless it's already running.
+        let running = Command::new("pgrep")
+            .args(["-x", "steam_osx"])
+            .output()
+            .is_ok_and(|output| output.status.success());
+        if !running {
+            let _ = Command::new("open").args(["-g", "-a", "Steam"]).spawn();
+            eyre::bail!("Steam wasn't running, so it's starting now. Launch again once Steam is open.");
+        }
+
         // Without these the Steam API doesn't know which game it is and the game restarts
         // itself through Steam, dropping Doorstop.
         let id = steam.id.to_string();
