@@ -22,7 +22,7 @@ This is Gale, the Thunderstore mod manager, with two changes: it runs on Mac, an
 Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Mac can't run the old beta. So your friends play on the current version too:
 
 1. Steam → right-click ROUNDS → **Properties → Betas → None** (leave `old-rounds-for-mods`).
-2. Install Gale from [Releases](../../releases/latest) (the `-setup.exe`). Already using Gale? Their profiles carry over.
+2. Download **Gale-Windows-setup.exe** from [Releases](../../releases/latest) and run it. If Windows says it protected your PC, click **More info → Run anyway**. Already using Gale? Their profiles carry over.
 3. Share your mods: in Gale, **Export → ...profile as code**, and they use **Import → ...profile from code**.
 
 ### What it does
