@@ -30,9 +30,9 @@ Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Ma
 
 ### What it does
 
-Before ROUNDS starts, Crosswind puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game ([ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit)). If you install an updated UnboundLib or RoundsWithFriends yourself, Crosswind uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
+Before ROUNDS starts, Crosswind puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game with [DuctTape](https://github.com/KieranK07/DuctTape). If you install an updated UnboundLib or RoundsWithFriends yourself, Crosswind uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
 
-Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first.
+Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After DuctTape or the [toolkit](https://github.com/KieranK07/rounds-porting-toolkit) changes, `python scripts/rounds-sync.py` copies their files into `src-tauri/resources/rounds` first.
 
 Everything below is Gale's own README.
 
