@@ -1,7 +1,7 @@
 {
-	"productName": "Gale",
+	"productName": "Crosswind",
 	"version": "1.23.1",
-	"identifier": "com.kesomannen.gale",
+	"identifier": "io.github.kierank07.crosswind",
 	"build": {
 		"beforeBuildCommand": "pnpm run build",
 		"beforeDevCommand": "pnpm run dev",
@@ -15,7 +15,7 @@
 		"targets": "all",
 		"externalBin": [],
 		"createUpdaterArtifacts": false,
-		"shortDescription": "A modern mod manager for Thunderstore",
+		"shortDescription": "Thunderstore mod manager for Mac and Windows, based on Gale",
 		"longDescription": "",
 		"icon": [
 			"icons/32x32.png",
@@ -70,7 +70,7 @@
 				"fullscreen": false,
 				"transparent": false,
 				"resizable": true,
-				"title": "Gale",
+				"title": "Crosswind",
 				"width": 900,
 				"height": 700,
 				"minWidth": 800,

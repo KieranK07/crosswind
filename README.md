@@ -1,19 +1,22 @@
-![Gale](https://raw.githubusercontent.com/Kesomannen/gale/master/images/banner.png)
+# Crosswind
 
-[![Thunderstore Version](https://img.shields.io/thunderstore/v/Kesomannen/GaleModManager?style=flat)](https://thunderstore.io/c/lethal-company/p/Kesomannen/GaleModManager/)
-[![Discord](https://img.shields.io/discord/1288196347597688912?style=flat&label=discord)](https://discord.gg/sfuWXRfeTt)
-[![GitHub License](https://img.shields.io/github/license/Kesomannen/gale?style=flat)](https://github.com/Kesomannen/gale?tab=GPL-3.0-1-ov-file#readme)
+[![ROUNDS: tested](https://img.shields.io/badge/ROUNDS-tested-2ea44f?style=flat)](#what-it-does)
+[![Other games: untested](https://img.shields.io/badge/other_games-untested-lightgrey?style=flat)](#crosswind)
+[![GitHub License](https://img.shields.io/github/license/KieranK07/crosswind?style=flat)](LICENSE)
 
-A powerful mod manager for [Thunderstore](https://thunderstore.io), built with [Svelte](https://kit.svelte.dev/) and [Tauri](https://tauri.app/).
+A Thunderstore mod manager for Mac and Windows, made for ROUNDS mods. It's a fork of [Gale](https://github.com/Kesomannen/gale) by Kesomannen, not Gale itself, so please don't ask Gale's developer for help with it.
+
+> [!NOTE]
+> Only ROUNDS is tested so far. Other games are listed because Gale lists them, and may not work, especially on a Mac.
 
 ## ROUNDS mods on a Mac (and Windows)
 
-This is Gale, the Thunderstore mod manager, with two changes: it runs on Mac, and it makes ROUNDS mods built for the old game work on the current version. No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac version, which is why Steam keeps putting a Mac back on the newest ROUNDS.
+No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac version, which is why Steam keeps putting a Mac back on the newest ROUNDS. Crosswind makes ROUNDS mods built for the old game work on the current version instead.
 
 ### On a Mac (M1 or newer)
 
-1. Download **Gale-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Gale** into Applications.
-2. Open Gale. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
+1. Download **Crosswind-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Crosswind** into Applications.
+2. Open Crosswind. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
 3. Choose **ROUNDS**, make a profile and install mods as usual (UnboundLib, RoundsWithFriends, card packs...).
 4. With Steam open, press **Launch**.
 
@@ -22,14 +25,16 @@ This is Gale, the Thunderstore mod manager, with two changes: it runs on Mac, an
 Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Mac can't run the old beta. So your friends play on the current version too:
 
 1. Steam → right-click ROUNDS → **Properties → Betas → None** (leave `old-rounds-for-mods`).
-2. Download **Gale-Windows-setup.exe** from [Releases](../../releases/latest) and run it. If Windows says it protected your PC, click **More info → Run anyway**. Already using Gale? Their profiles carry over.
-3. Share your mods: in Gale, **Export → ...profile as code**, and they use **Import → ...profile from code**.
+2. Download **Crosswind-Windows-setup.exe** from [Releases](../../releases/latest) and run it. If Windows says it protected your PC, click **More info → Run anyway**. It installs next to Gale or r2modman and doesn't touch them.
+3. Share your mods: in Crosswind, **Export → ...profile as code**, and they use **Import → ...profile from code**.
 
 ### What it does
 
-Before ROUNDS starts, Gale puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game ([ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit)). If you install an updated UnboundLib or RoundsWithFriends yourself, Gale uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and Gale's log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
+Before ROUNDS starts, Crosswind puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game ([ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit)). If you install an updated UnboundLib or RoundsWithFriends yourself, Crosswind uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
 
-Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first. Everything below is upstream Gale's README.
+Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first.
+
+Everything below is Gale's own README.
 
 ## Features
 

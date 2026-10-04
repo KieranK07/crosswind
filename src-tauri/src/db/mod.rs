@@ -66,7 +66,7 @@ fn run_migrations(conn: &mut rusqlite::Connection) -> Result<()> {
 
     migrations.to_latest(conn).map_err(|err| if let rusqlite_migration::Error::MigrationDefinition(
             MigrationDefinitionError::DatabaseTooFarAhead,
-        ) = err { eyre!("database has been modified by a newer version of Gale, please update to the latest version") } else { eyre!(err) })?;
+        ) = err { eyre!("database has been modified by a newer version of Crosswind, please update to the latest version") } else { eyre!(err) })?;
 
     Ok(())
 }

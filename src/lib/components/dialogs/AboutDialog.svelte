@@ -31,25 +31,21 @@
 	<div class="h-3"></div>
 	<img src="logo.png" alt="Logo" class="float-right size-20" />
 	<div>
-		<h3 class="text-primary-900 text-xl font-semibold dark:text-white">Gale</h3>
+		<h3 class="text-primary-900 text-xl font-semibold dark:text-white">Crosswind</h3>
 		<p class="text-primary-600 dark:text-primary-300">
 			{m.aboutDialog_version({ version: version })}
 			<br />
 			GNU General Public License v3.0
+			<br />
+			Only ROUNDS is tested so far.
 		</p>
 		<div class="mt-3 flex items-center gap-2">
-			<Icon icon="mdi:file-document" class="text-primary-900 text-xl dark:text-white" />
-			<Link href="https://github.com/Kesomannen/gale/blob/master/CHANGELOG.md"
-				>{m.aboutDialog_changelog()}</Link
-			>
-		</div>
-		<div class="mt-1 flex items-center gap-2">
 			<Icon icon="mdi:github" class="text-primary-900 text-xl dark:text-white" />
-			<Link href="https://github.com/Kesomannen/gale">GitHub</Link>
+			<Link href="https://github.com/KieranK07/crosswind">GitHub</Link>
 		</div>
 		<div class="mt-1 flex items-center gap-2">
-			<Icon icon="mdi:discord" class="text-primary-900 text-xl dark:text-white" />
-			<Link href="https://discord.gg/sfuWXRfeTt">Discord</Link>
+			<Icon icon="mdi:weather-windy" class="text-primary-900 text-xl dark:text-white" />
+			<Link href="https://github.com/Kesomannen/gale">Based on Gale by Kesomannen</Link>
 		</div>
 		<div class="mt-1 flex items-center gap-2">
 			<Icon icon="mdi:heart" class="text-primary-900 text-xl dark:text-white" />

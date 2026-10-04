@@ -46,8 +46,8 @@
 <Dialog open={missingProfiles.length > 0} canClose={false} title="Missing Profiles">
 	<div class="text-primary-600 dark:text-primary-300 mb-2">
 		<p class="mb-2">
-			Gale detected missing profiles while loading. This can happen if you moved or deleted profiles
-			from outside Gale.
+			Crosswind detected missing profiles while loading. This can happen if you moved or deleted profiles
+			from outside Crosswind.
 		</p>
 		<p>Please resolve each missing profile before continuing.</p>
 	</div>

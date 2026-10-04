@@ -39,7 +39,7 @@ fn setup(app: &mut App) -> Result<(), Box<dyn std::error::Error>> {
             use tauri_plugin_dialog::DialogExt;
 
             app.dialog()
-                .message(format!("Failed to launch Gale: {err:?}"))
+                .message(format!("Failed to launch Crosswind: {err:?}"))
                 .blocking_show();
         }
 

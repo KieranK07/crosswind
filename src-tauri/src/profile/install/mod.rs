@@ -285,7 +285,7 @@ pub async fn handle_exit(app: AppHandle) {
     let wait_for_install = install_queue.wait_for_empty();
 
     app.dialog()
-        .message("Gale is busy installing mods.")
+        .message("Crosswind is busy installing mods.")
         .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
             "Continue in background".to_string(),
             "Cancel".to_string(),

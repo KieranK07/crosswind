@@ -462,15 +462,15 @@ impl ManagedGame {
 
         #[cfg(target_os = "windows")]
         let shortcut_path =
-            desktop_path.join(format!("Gale - {} - {}.lnk", self.game.name, profile.name));
+            desktop_path.join(format!("Crosswind - {} - {}.lnk", self.game.name, profile.name));
 
         #[cfg(target_os = "linux")]
         let shortcut_path =
-            desktop_path.join(format!("gale-{}-{}.desktop", self.game.name, profile.name));
+            desktop_path.join(format!("crosswind-{}-{}.desktop", self.game.name, profile.name));
 
         #[cfg(target_os = "macos")]
         let shortcut_path =
-            desktop_path.join(format!("Gale - {} - {}.command", self.game.name, profile.name));
+            desktop_path.join(format!("Crosswind - {} - {}.command", self.game.name, profile.name));
 
         if shortcut_path.exists() {
             bail!("shortcut already exists");
@@ -524,7 +524,7 @@ impl ManagedGame {
             let desktop_content = format!(
                 "[Desktop Entry]\n\
                  Type=Application\n\
-                 Name=Gale - {} - {}\n\
+                 Name=Crosswind - {} - {}\n\
                  Exec=\"{}\" --game \"{}\" --profile \"{}\" --launch --no-gui\n\
                  Icon=gale\n\
                  Terminal=false\n\
