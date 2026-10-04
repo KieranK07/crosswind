@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22305e"/>
+      <stop offset="1" stop-color="#0d1330"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.18" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff6a2b"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#2f8cff"/>
+      <stop offset="1" stop-color="#6fd6ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- macOS icon grid: 824 body on a 1024 canvas -->
+  <g filter="url(#shadow)">
+    <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  </g>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#glow)"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 300 290 C 380 278, 460 270, 540 270" stroke="url(#orange)" stroke-width="26" opacity="0.7"/>
+    <path d="M 196 396 C 320 376, 440 356, 560 360 C 680 364, 780 386, 800 446 C 816 496, 776 532, 734 524 C 698 516, 692 480, 718 470" stroke="url(#orange)" stroke-width="58"/>
+    <path d="M 724 734 C 644 746, 564 754, 484 754" stroke="url(#blue)" stroke-width="26" opacity="0.7"/>
+    <path d="M 828 628 C 704 648, 584 668, 464 664 C 344 660, 244 638, 224 578 C 208 528, 248 492, 290 500 C 326 508, 332 544, 306 554" stroke="url(#blue)" stroke-width="58"/>
+  </g>
+</svg>
