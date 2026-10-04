@@ -534,8 +534,9 @@ mod tests {
         let first = update_profile(&dir, &http).await.unwrap();
         println!("first run:\n  {}", first.join("\n  "));
 
-        // Bknibb's files, UnboundLib with the modpack's patch on top
-        assert_eq!(sha("willis81808-UnboundLib/UnboundLib.dll"), "e817c732f769d562e46dd061f43212ed517f617b018a1af23aa68bfd032bf280");
+        // Bknibb's files; on macOS UnboundLib gets the toolkit's patch on top (its Windows-only key check)
+        let unboundlib = if cfg!(target_os = "macos") { "e817c732f769d562e46dd061f43212ed517f617b018a1af23aa68bfd032bf280" } else { UNBOUNDLIB.sha256 };
+        assert_eq!(sha("willis81808-UnboundLib/UnboundLib.dll"), unboundlib);
         assert_eq!(sha("willis81808-UnboundLib/Octokit.dll"), OCTOKIT.sha256);
         assert_eq!(sha("willis81808-MMHook/MMHOOK_Assembly-CSharp.dll"), MMHOOK.sha256);
         assert_eq!(sha("olavim-RoundsWithFriends/RoundsWithFriends.dll"), RWF.sha256);
@@ -543,7 +544,7 @@ mod tests {
         assert!(dir.join("BepInEx/patchers/rounds-port-AutoFix/rounds-port.AutoFix.dll").is_file());
         assert!(plugins.join("rounds-port-Runtime/rounds-port.Runtime.dll").is_file());
 
-        // every modpack patch whose original is in the profile was applied
+        // every patch whose original is in the profile was applied
         for patch in patches() {
             for path in plugin_files(&plugins) {
                 if util::fs::file_name_owned(&path) == patch.name {

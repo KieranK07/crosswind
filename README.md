@@ -6,18 +6,30 @@
 
 A powerful mod manager for [Thunderstore](https://thunderstore.io), built with [Svelte](https://kit.svelte.dev/) and [Tauri](https://tauri.app/).
 
-## This fork: macOS, and ROUNDS mods on the current game
+## ROUNDS mods on a Mac (and Windows)
 
-Gale for macOS and Windows that runs ROUNDS mods made before the 2025 update.
+This is Gale, the Thunderstore mod manager, with two changes: it runs on Mac, and it makes ROUNDS mods built for the old game work on the current version. No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac version, which is why Steam keeps putting a Mac back on the newest ROUNDS.
 
-- Launches native Mac games with BepInEx: Doorstop 4.6 and a BepInEx core that runs natively on Apple Silicon ship with the app.
-- ROUNDS profiles are brought up to date before each launch: Bknibb's UnboundLib 4 and RoundsWithFriends 3 replace the old Thunderstore versions, and AutoFix, the in-game fixes and the hand-made patches from the [ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit) go in. Packages you install yourself always win over these.
-- Steam must be running. The game starts directly, not through Steam.
-- No automatic updates (upstream's would replace this fork).
+### On a Mac (M1 or newer)
 
-Download: the latest build from [Actions](../../actions/workflows/rounds.yaml) (macOS: unzip, then right-click Gale > Open the first time).
+1. Download **Gale-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Gale** into Applications.
+2. Open Gale. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
+3. Choose **ROUNDS**, make a profile and install mods as usual (UnboundLib, RoundsWithFriends, card packs...).
+4. With Steam open, press **Launch**.
 
-Build: `pnpm install && pnpm tauri build --bundles app` (macOS) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first.
+### Playing with friends on Windows
+
+Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Mac can't run the old beta. So your friends play on the current version too:
+
+1. Steam → right-click ROUNDS → **Properties → Betas → None** (leave `old-rounds-for-mods`).
+2. Install Gale from [Releases](../../releases/latest) (the `-setup.exe`). Already using Gale? Their profiles carry over.
+3. Share your mods: in Gale, **Export → ...profile as code**, and they use **Import → ...profile from code**.
+
+### What it does
+
+Before ROUNDS starts, Gale puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game ([ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit)). If you install an updated UnboundLib or RoundsWithFriends yourself, Gale uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and Gale's log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
+
+Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first. Everything below is upstream Gale's README.
 
 ## Features
 
