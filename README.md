@@ -6,15 +6,18 @@
 
 A powerful mod manager for [Thunderstore](https://thunderstore.io), built with [Svelte](https://kit.svelte.dev/) and [Tauri](https://tauri.app/).
 
-## This fork: macOS and ROUNDS
+## This fork: macOS, and ROUNDS mods on the current game
 
-Gale with macOS support, built for ROUNDS on Apple Silicon.
+Gale for macOS and Windows that runs ROUNDS mods made before the 2025 update.
 
 - Launches native Mac games with BepInEx: Doorstop 4.6 and a BepInEx core that runs natively on Apple Silicon ship with the app.
-- ROUNDS profiles are updated for the current game before each launch: Bknibb's UnboundLib 4 and RoundsWithFriends 3 replace the old Thunderstore versions, and hand-made patches from [rounds-mac-modpack](https://github.com/KieranK07/rounds-mac-modpack) are applied to the mod versions they fix.
+- ROUNDS profiles are brought up to date before each launch: Bknibb's UnboundLib 4 and RoundsWithFriends 3 replace the old Thunderstore versions, and AutoFix, the in-game fixes and the hand-made patches from the [ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit) go in. Packages you install yourself always win over these.
 - Steam must be running. The game starts directly, not through Steam.
+- No automatic updates (upstream's would replace this fork).
 
-Build: `pnpm install && pnpm tauri build --bundles app`
+Download: the latest build from [Actions](../../actions/workflows/rounds.yaml) (macOS: unzip, then right-click Gale > Open the first time).
+
+Build: `pnpm install && pnpm tauri build --bundles app` (macOS) or `--bundles nsis` (Windows). After the toolkit changes, `python scripts/rounds-sync.py` copies its files into `src-tauri/resources/rounds` first.
 
 ## Features
 

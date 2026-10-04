@@ -6,7 +6,7 @@
 //!
 //! - files from the old UnboundLib, MMHook and RoundsWithFriends releases are swapped for Bknibb's
 //!   ports, downloaded from GitHub and checked by SHA-256;
-//! - exact mod versions that need hand-made fixes get the rounds-mac-modpack's binary patches;
+//! - exact mod versions that need hand-made fixes get the ROUNDS Porting Toolkit's binary patches;
 //! - BepInEx's `HideManagerGameObject` is turned on (otherwise the game destroys plugin objects);
 //! - rounds-port AutoFix goes into patchers: it fixes the other old mods while BepInEx starts;
 //! - rounds-port Runtime (in-game fixes, no UI) and the Odin Serializer stand-in go into plugins.
@@ -101,7 +101,7 @@ const REMOVED_DIRS: &[&str] = &[
     "BepInEx/patchers/RoundsPort-AutoFix",
 ];
 
-/// A binary patch from the rounds-mac-modpack, for one exact file.
+/// A binary patch from the ROUNDS Porting Toolkit (patches/), for one exact file.
 struct Patch {
     name: String,
     before: String,

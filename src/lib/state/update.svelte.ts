@@ -1,18 +1,12 @@
 import { isFlatpak } from '$lib/api';
-import { check, type Update } from '@tauri-apps/plugin-updater';
-import { platform } from '@tauri-apps/plugin-os';
+import { type Update } from '@tauri-apps/plugin-updater';
 
 class UpdateState {
 	next: Update | null = $state(null);
 	isChecking = $state(false);
 
 	refresh = async () => {
-		// Upstream publishes no macOS builds, so there is nothing to update to.
-		if (this.isChecking || platform() === 'macos') return;
-
-		this.isChecking = true;
-		this.next = await check();
-		this.isChecking = false;
+		// This fork has no update feed: upstream's would replace it with Gale without macOS and ROUNDS support.
 	};
 }
 
