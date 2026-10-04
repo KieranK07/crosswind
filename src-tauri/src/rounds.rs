@@ -119,12 +119,14 @@ fn patches() -> Vec<Patch> {
         .filter_map(|line| {
             let mut cols = line.split('\t');
             let path = cols.next()?;
-            Some(Patch {
+            let patch = Patch {
                 name: path.rsplit('/').next()?.to_string(),
                 before: cols.next()?.to_string(),
                 after: cols.next()?.to_string(),
                 patch: cols.next()?.to_string(),
-            })
+            };
+            // a fifth column "macos": that platform only (UnboundLib's Windows-only "hold Left Shift" check)
+            (cols.next() != Some("macos") || cfg!(target_os = "macos")).then_some(patch)
         })
         .collect()
 }
