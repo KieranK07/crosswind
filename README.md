@@ -13,7 +13,7 @@ A Thunderstore mod manager for Mac and Windows, made for ROUNDS mods. It's a for
 
 No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac version, which is why Steam keeps putting a Mac back on the newest ROUNDS. Crosswind makes ROUNDS mods built for the old game work on the current version instead.
 
-### On a Mac (M1 or newer)
+### On a Mac (Apple Silicon or Intel)
 
 1. Download **Crosswind-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Crosswind** into Applications.
 2. Open Crosswind. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.

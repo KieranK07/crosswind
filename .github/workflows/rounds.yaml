@@ -11,10 +11,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Universal: runs on Apple Silicon and Intel Macs
           - platform: macos-latest
-            args: '--bundles app'
+            args: '--target universal-apple-darwin --bundles app'
+            targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+            bundle: 'src-tauri/target/universal-apple-darwin/release/bundle'
           - platform: windows-latest
             args: '--bundles nsis'
+            bundle: 'src-tauri/target/release/bundle'
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -32,6 +36,8 @@ jobs:
       - run: pnpm install
 
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.targets }}
 
       - uses: actions/setup-python@v5
         with:
@@ -53,7 +59,8 @@ jobs:
       - name: Package the macOS app
         if: runner.os == 'macOS'
         run: |
-          cd src-tauri/target/release/bundle/macos
+          cd ${{ matrix.bundle }}/macos
+          archs=$(lipo -archs Crosswind.app/Contents/MacOS/*) && [[ $archs == *x86_64* && $archs == *arm64* ]]
           codesign --force --deep -s - Crosswind.app
           ditto -c -k --keepParent Crosswind.app Crosswind-macOS.zip
 
@@ -61,5 +68,5 @@ jobs:
         with:
           name: Crosswind-${{ runner.os }}
           path: |
-            src-tauri/target/release/bundle/macos/Crosswind-macOS.zip
-            src-tauri/target/release/bundle/nsis/*.exe
+            ${{ matrix.bundle }}/macos/Crosswind-macOS.zip
+            ${{ matrix.bundle }}/nsis/*.exe
