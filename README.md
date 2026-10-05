@@ -1,10 +1,9 @@
 # Crosswind
 
-[![GitHub License](https://img.shields.io/github/license/KieranK07/crosswind?style=flat)](LICENSE)
+[![GitHub License](https://img.shields.io/github/license/KieranK07/crosswind?style=flat)](LICENSE.md)
 
-A Thunderstore mod manager for Mac. It lists the games whose Steam page says they run on a Mac, and checks again
-each time it opens, so new Thunderstore games show up by themselves. It's a fork of [Gale](https://github.com/Kesomannen/gale)
-by Kesomannen, not Gale itself, so please don't ask Gale's developer for help with it.
+A mod manager for Thunderstore games on a Mac. It lists every Thunderstore game whose Steam version runs on a Mac,
+installs mods into profiles, and launches the game with a Mac build of BepInEx. Apple Silicon and Intel.
 
 ## Install
 
@@ -13,191 +12,29 @@ by Kesomannen, not Gale itself, so please don't ask Gale's developer for help wi
 3. Choose a game, make a profile and install mods.
 4. With Steam open, press **Launch**.
 
-Runs on Apple Silicon and Intel. Games that use BepInEx get a Mac build of it; other mod loaders may not run on a Mac.
+## What it does
 
-Building it yourself: `pnpm install && pnpm tauri build --bundles app`.
+- **Games:** the ones whose Steam page lists macOS. The list is checked again each time Crosswind opens, so new
+  Thunderstore games show up by themselves.
+- **Launching:** the game starts directly with BepInEx loaded, not through Steam (which can't pass BepInEx's loader to
+  a Mac game). Games on other mod loaders may not run on a Mac.
+- **Profiles:** mods and their dependencies from Thunderstore, a config editor, and profiles shared as a code
+  (**Export → profile as code**, then **Import → profile from code**). Profiles from r2modman can be imported.
 
-Everything below is Gale's own README.
+A mod that only works on Windows still won't run. Problems: [open an issue](../../issues) with the game, the mod and
+the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
 
-## Features
+## Building
 
-- Support for 150+ games on Thunderstore and Hexium, including Lethal Company, R.E.P.O and Risk Of Rain 2
-- An intuitive and responsive interface
-- Tiny download size and resource usage
-- Feature-rich mod config editor
-- Automatic profile syncing
-
-[...and more](https://github.com/Kesomannen/gale/wiki/Features)
-
-## Installation
-
-> [!WARNING]
-> The only official sources for Gale are [Github](https://github.com/Kesomannen/gale), [Thunderstore](https://thunderstore.io/c/lethal-company/p/Kesomannen/GaleModManager/) and [Hexium](https://hexium.gg/mod-manager). Any other website claiming to provide an official download is not legit. Particularly, **galemodmanager.com** is unofficial and provides a severly outdated version of the app!
-
-### Windows
-
-<details>
-  <summary>
-    <b>Manual (Thunderstore)</b>
-  </summary>
-  
-  - Go to the [Thunderstore page](https://thunderstore.io/c/lethal-company/p/Kesomannen/GaleModManager/) and click _Manual Download_.
-  - Extract the downloaded .zip file (for example by right-clicking and choosing _Extract All_).
-  - Run the `Gale_X.X.X_x64_en-US.msi` file inside of the extracted folder.
-</details>
-
-<details>
-  <summary>
-    <b>Manual (Github)</b>
-  </summary>
-  
-  - Go to [Releases](https://github.com/Kesomannen/gale/releases).
-  - Download the `Gale_X.X.X_x64_en-US.msi` file for your desired version (the latest is recommended).
-  - Run the downloaded file.
-</details>
-
-<details>
-  <summary>
-    <b>Scoop</b>
-  </summary>
-  
-  Gale is available as a [Scoop](https://scoop.sh/) app in the official [games bucket](https://github.com/Calinou/scoop-games):
-
-```powershell
-scoop bucket add games
-scoop install gale
+```
+pnpm install
+pnpm tauri build --target universal-apple-darwin --bundles app
 ```
 
-</details>
-
-<details>
-  <summary>
-    <b>WinGet</b>
-  </summary>
-  
-  Gale is available as a [WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/) application:
-
-```powershell
-winget install Kesomannen.Gale
-```
-
-</details>
-
-> [!NOTE]
-> You might get a prompt saying "Windows has protected your PC". In this case, click `More Info` and `Run Anyway`.
-
-> [!TIP]
-> If you're unsure about the safety of this app, I would suggest running it through a service like [VirusTotal](https://www.virustotal.com).
-
-### Linux
-
-<details>
-  <summary>
-    <b>Arch</b>
-  </summary>
-  
-  Gale is available as a **community-maintained** AUR package: [gale](https://aur.archlinux.org/packages/gale) (from source) and [gale-bin](https://aur.archlinux.org/packages/gale-bin) (prebuilt).
-  
-  Example installation command:
-  
-  ```bash
-  yay -S gale-bin
-  ```
-
-> [!WARN]
-> **Do not** use the in-app updater, instead update the app via the AUR.
-
-</details>
-
-<details>
-  <summary>
-    <b>Debian</b>
-  </summary>
-
-Gale is available as a .deb package in [Releases](https://github.com/Kesomannen/gale/releases). After downloading, install with:
-
-```bash
-sudo dpkg -i Gale_X.X.X_x64_en-US.deb
-```
-
-Updating Gale can be done from the in-app updater UI.
-
-</details>
-
-<details>
-  <summary>
-    <b>Fedora</b>
-  </summary>
-
-Gale is available as a .rpm package in [Releases](https://github.com/Kesomannen/gale/releases). After downloading, install with:
-
-```bash
-sudo rpm -i Gale_X.X.X_x64_en-US.rpm
-```
-
-Updating Gale can be done from the in-app updater UI.
-
-</details>
-
-<details>
-  <summary>
-    <b>Flatpak</b>
-  </summary>
-
-Gale is available as an independently hosted Flatpak package:
-
-```bash
-flatpak install https://kesomannen.com/com.kesomannen.gale.flatpakref
-```
-
-Updating the app can be done with `flatpak update com.kesomannen.gale`.
-
-</details>
-
-<details>
-  <summary>
-    <b>AppImage</b>
-  </summary>
-
-Distribution-agnostic AppImages are available in [Releases](https://github.com/Kesomannen/gale/releases). After downloading, make the file executable and run it:
-
-```bash
-chmod +x Gale_X.X.X_x64_en-US.AppImage
-./Gale_X.X.X_x64_en-US.AppImage
-```
-
-Updating Gale can be done from the in-app updater UI.
-
-</details>
-
----
-
-Want to build it from source? See the [wiki](https://github.com/Kesomannen/gale/wiki/building-from-source).
-
-## Screenshots
-
-_Profile_
-
-![screenshot](https://raw.githubusercontent.com/Kesomannen/gale/master/images/screenshots/screenshot1.png)
-
-_Thunderstore browser_
-
-![screenshot](https://raw.githubusercontent.com/Kesomannen/gale/master/images/screenshots/screenshot2.png)
-
-_Mod config editor_
-
-![screenshot](https://raw.githubusercontent.com/Kesomannen/gale/master/images/screenshots/screenshot3.png)
-
-_Modpack export_
-
-![screenshot](https://raw.githubusercontent.com/Kesomannen/gale/master/images/screenshots/screenshot4.png)
+The game list shipped with the app (used until the first check) comes from
+`cd src-tauri && cargo test --lib write_bundled_games -- --ignored`.
 
 ## Credits
 
-Material icons licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
-
-Thanks to Ebkr for helping to navigate the Thunderstore API and BepInEx, and of course making the original mod manager!
-
----
-
-Still have questions? See the [FAQ](https://github.com/Kesomannen/gale/wiki/faq) or a [detailed list of features](https://github.com/Kesomannen/gale/wiki/Features).
+A fork of [Gale](https://github.com/Kesomannen/gale) by Kesomannen, so it's not Gale: please don't ask Gale's developer
+for help with it. GPL-3.0, like Gale. Material icons are Apache 2.0. Thanks to Ebkr for r2modman.
