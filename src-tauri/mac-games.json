@@ -1,0 +1,1059 @@
+[
+	{
+		"name": "ROUNDS",
+		"popular": true,
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1557740
+			}
+		}
+	},
+	{
+		"name": "Valheim",
+		"popular": true,
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "denikson-BepInExPack_Valheim",
+			"subdirs": [
+				{
+					"name": "SlimVML",
+					"target": "BepInEx/SlimVML"
+				}
+			]
+		},
+		"platforms": {
+			"steam": {
+				"id": 892970
+			},
+			"xboxStore": {
+				"identifier": "CoffeeStainStudios.Valheim"
+			}
+		},
+		"backends": [
+			"Thunderstore",
+			"Hexium"
+		]
+	},
+	{
+		"name": "20 Minutes Till Dawn",
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "BepInExPackMTD-BepInExPack_20MTD"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1966900
+			},
+			"epicGames": {
+				"identifier": "4656facc740742a39e265b026e13d075"
+			}
+		}
+	},
+	{
+		"name": "9 Kings",
+		"slug": "9-kings",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2784470
+			}
+		}
+	},
+	{
+		"name": "A Gentlemen's Dispute",
+		"slug": "a-gentlemens-dispute",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2820700
+			}
+		}
+	},
+	{
+		"name": "ANEURISM IV",
+		"slug": "aneurism-iv",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2773280
+			}
+		}
+	},
+	{
+		"name": "Across the Obelisk",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1385380
+			}
+		}
+	},
+	{
+		"name": "Arcus Chroma",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1447350
+			}
+		}
+	},
+	{
+		"name": "Backpack Hero",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1970580
+			}
+		}
+	},
+	{
+		"name": "Bad North",
+		"slug": "bad-north",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 688420
+			}
+		}
+	},
+	{
+		"name": "Balatro",
+		"modLoader": {
+			"name": "Lovely"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2379780
+			}
+		}
+	},
+	{
+		"name": "Big Ambitions",
+		"slug": "big-ambitions",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1331550
+			}
+		}
+	},
+	{
+		"name": "Big Walk",
+		"slug": "big-walk",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1478500
+			}
+		}
+	},
+	{
+		"name": "Bloons TD 6",
+		"slug": "bloons-td-6",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 960090
+			},
+			"epicGames": {
+				"identifier": "7786b355a13b47a6b3915335117cd0b2"
+			}
+		}
+	},
+	{
+		"name": "Castle Story",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 227860
+			}
+		}
+	},
+	{
+		"name": "Cats are Liquid - A Better Place",
+		"slug": "cats-are-liquid",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1188080
+			}
+		}
+	},
+	{
+		"name": "Crab Game",
+		"slug": "crab-game",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1782210
+			}
+		}
+	},
+	{
+		"name": "Cult of the Lamb",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1313140
+			}
+		}
+	},
+	{
+		"name": "Cuphead",
+		"slug": "cuphead",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 268910
+			},
+			"xboxStore": {
+				"identifier": "StudioMDHR.20872A364DAA1"
+			}
+		}
+	},
+	{
+		"name": "DEPO : Death Epileptic Pixel Origins",
+		"slug": "depo",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1091320
+			}
+		}
+	},
+	{
+		"name": "DREDGE",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1562430
+			}
+		}
+	},
+	{
+		"name": "DUSK",
+		"slug": "dusk",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 519860
+			}
+		}
+	},
+	{
+		"name": "Disco Elysium",
+		"slug": "disco-elysium",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 632470
+			}
+		}
+	},
+	{
+		"name": "Distance",
+		"slug": "distance",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 233610
+			}
+		}
+	},
+	{
+		"name": "Ducks Can Drive",
+		"slug": "ducks-can-drive",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2472840
+			}
+		}
+	},
+	{
+		"name": "ENA: Dream BBQ",
+		"slug": "ena-dream-bbq",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2134320
+			}
+		}
+	},
+	{
+		"name": "Football Manager 26",
+		"slug": "football-manager-26",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3551340
+			}
+		}
+	},
+	{
+		"name": "For The King",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 527230
+			},
+			"epicGames": {
+				"identifier": "Discus"
+			}
+		}
+	},
+	{
+		"name": "Gang Beasts",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 285900
+			}
+		}
+	},
+	{
+		"name": "Garfield Kart - Furious Racing",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1085510
+			}
+		}
+	},
+	{
+		"name": "Grey Hack",
+		"slug": "grey-hack",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 605230
+			}
+		}
+	},
+	{
+		"name": "Guilty as Sock!",
+		"slug": "guilty-as-sock",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3400930
+			}
+		}
+	},
+	{
+		"name": "Hades II",
+		"slug": "hades-ii",
+		"modLoader": {
+			"name": "ReturnOfModding",
+			"packageName": "Hell2Modding-Hell2Modding",
+			"fileTarget": "./Ship",
+			"files": [
+				"d3d12.dll"
+			]
+		},
+		"platforms": {
+			"steam": {
+				"id": 1145350
+			}
+		}
+	},
+	{
+		"name": "Hollow Knight: Silksong",
+		"slug": "hollow-knight-silksong",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1030300
+			},
+			"xboxStore": {
+				"identifier": "TeamCherry.HollowKnightSilksong"
+			}
+		}
+	},
+	{
+		"name": "Human Fall Flat",
+		"slug": "human-fall-flat",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 477160
+			}
+		}
+	},
+	{
+		"name": "Inscryption",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1092790
+			}
+		}
+	},
+	{
+		"name": "Len's Island",
+		"slug": "lens-island",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1335830
+			}
+		}
+	},
+	{
+		"name": "Lethal League Blaze",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 553310
+			}
+		}
+	},
+	{
+		"name": "Logic World",
+		"slug": "logic-world",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1054340
+			}
+		}
+	},
+	{
+		"name": "Magicite",
+		"slug": "magicite",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 268750
+			}
+		}
+	},
+	{
+		"name": "Maltese's Fluffy Onsen",
+		"slug": "malteses-fluffy-onsen",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3404470
+			}
+		}
+	},
+	{
+		"name": "Meeple Station",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 900010
+			}
+		}
+	},
+	{
+		"name": "Monster Train 2",
+		"slug": "monster-train-2",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2742830
+			}
+		}
+	},
+	{
+		"name": "Muck",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1625450
+			}
+		}
+	},
+	{
+		"name": "My Dream Setup",
+		"slug": "my-dream-setup",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2200780
+			}
+		}
+	},
+	{
+		"name": "Necropolis",
+		"slug": "necropolis",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 384490
+			}
+		}
+	},
+	{
+		"name": "Nine Sols",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1809540
+			}
+		}
+	},
+	{
+		"name": "On-Together: Virtual Co-Working",
+		"slug": "on-together",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3707400
+			}
+		}
+	},
+	{
+		"name": "Paquerette Down the Bunburrows",
+		"slug": "paquerette-down-the-bunburrows",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1628610
+			}
+		}
+	},
+	{
+		"name": "Peglin",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1296610
+			}
+		}
+	},
+	{
+		"name": "Pikuniku",
+		"slug": "pikuniku",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 572890
+			},
+			"epicGames": {
+				"identifier": "48619f5656da446abccb727b78cda644"
+			}
+		}
+	},
+	{
+		"name": "Pulsar: Lost Colony",
+		"slug": "pulsar-lost-colony",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 252870
+			}
+		}
+	},
+	{
+		"name": "Ravenfield",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 636480
+			}
+		}
+	},
+	{
+		"name": "Receiver 2",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1129310
+			}
+		}
+	},
+	{
+		"name": "Return of the Obra Dinn",
+		"slug": "return-of-the-obra-dinn",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 653530
+			}
+		}
+	},
+	{
+		"name": "STRAFTAT",
+		"slug": "straftat",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2386720
+			}
+		}
+	},
+	{
+		"name": "SUPERHOT",
+		"slug": "superhot",
+		"modLoader": {
+			"name": "MelonLoader"
+		},
+		"platforms": {
+			"steam": {
+				"id": 322500
+			}
+		}
+	},
+	{
+		"name": "Shadows Over Loathing",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1939160
+			}
+		}
+	},
+	{
+		"name": "Shapez 2",
+		"slug": "shapez-2",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2162800
+			}
+		}
+	},
+	{
+		"name": "Skul: The Hero Slayer",
+		"slug": "skul-the-hero-slayer",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1147560
+			}
+		}
+	},
+	{
+		"name": "Slipstream: Rogue Space",
+		"slug": "slipstream-rogue-space",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2765860
+			}
+		}
+	},
+	{
+		"name": "Smushi Come Home",
+		"slug": "smushi-come-home",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1740300
+			}
+		}
+	},
+	{
+		"name": "Songs of Conquest",
+		"slug": "songs-of-conquest",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 867210
+			}
+		}
+	},
+	{
+		"name": "Spooky's Jump Scare Mansion: HD Renovation",
+		"slug": "jump-scare-mansion",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 577690
+			}
+		}
+	},
+	{
+		"name": "Stacklands",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1948280
+			}
+		}
+	},
+	{
+		"name": "Stolen Realm",
+		"slug": "stolen-realm",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1330000
+			}
+		}
+	},
+	{
+		"name": "Subnautica",
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "Subnautica_Modding-BepInExPack",
+			"subdirs": [
+				{
+					"name": "QMods",
+					"target": "QMods",
+					"mode": "track"
+				}
+			]
+		},
+		"platforms": {
+			"steam": {
+				"id": 264710
+			},
+			"epicGames": {
+				"identifier": "Jaguar"
+			},
+			"xboxStore": {
+				"identifier": "UnknownWorldsEntertainmen.GAMEPREVIEWSubnautica"
+			}
+		}
+	},
+	{
+		"name": "Subnautica: Below Zero",
+		"slug": "subnautica-below-zero",
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "Subnautica_Modding-BepInExPack_BelowZero",
+			"subdirs": [
+				{
+					"name": "QMods",
+					"target": "QMods",
+					"mode": "track"
+				}
+			]
+		},
+		"platforms": {
+			"steam": {
+				"id": 848450
+			},
+			"xboxStore": {
+				"identifier": "UnknownWorldsEntertainmen.SubnauticaBelowZero"
+			}
+		}
+	},
+	{
+		"name": "Sun Haven",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1432860
+			}
+		}
+	},
+	{
+		"name": "TABS",
+		"slug": "totally-accurate-battle-simulator",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 508440
+			},
+			"epicGames": {
+				"identifier": "Driftfish"
+			},
+			"xboxStore": {
+				"identifier": "LandfallGames.TotallyAccurateBattleSimulator"
+			}
+		}
+	},
+	{
+		"name": "TaleSpire",
+		"slug": "talespire",
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "bbepisTaleSpire-BepInExPack"
+		},
+		"platforms": {
+			"steam": {
+				"id": 720620
+			}
+		}
+	},
+	{
+		"name": "Tank Team",
+		"slug": "tank-team",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2587450
+			}
+		}
+	},
+	{
+		"name": "The Farmer Was Replaced",
+		"slug": "the-farmer-was-replaced",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2060160
+			}
+		}
+	},
+	{
+		"name": "The Ouroboros King",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2096510
+			}
+		}
+	},
+	{
+		"name": "Thronefall",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 2239150
+			}
+		}
+	},
+	{
+		"name": "Timberborn",
+		"modLoader": {
+			"name": "BepInEx",
+			"subdirs": [
+				{
+					"name": "Maps",
+					"target": "BepInEx/Maps"
+				}
+			]
+		},
+		"platforms": {
+			"steam": {
+				"id": 1062090
+			},
+			"epicGames": {
+				"identifier": "972a4ca2631e43b4ba7bc3b7586ad8c4"
+			}
+		}
+	},
+	{
+		"name": "TouhouLostBranchOfLegend",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1140150
+			}
+		}
+	},
+	{
+		"name": "Trombone Champ",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1059990
+			}
+		}
+	},
+	{
+		"name": "Ultimate Chicken Horse",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 386940
+			}
+		}
+	},
+	{
+		"name": "Very Very Valet",
+		"slug": "very-very-valet",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 1448840
+			}
+		}
+	},
+	{
+		"name": "West of Loathing",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 597220
+			}
+		}
+	},
+	{
+		"name": "Wizard of Legend",
+		"modLoader": {
+			"name": "BepInEx",
+			"packageName": "Modding_Council-BepInExPack_of_Legend"
+		},
+		"platforms": {
+			"steam": {
+				"id": 445980
+			}
+		}
+	},
+	{
+		"name": "Word Play",
+		"slug": "word-play",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3586660
+			}
+		}
+	},
+	{
+		"name": "YAPYAP",
+		"slug": "yapyap",
+		"modLoader": {
+			"name": "BepInEx"
+		},
+		"platforms": {
+			"steam": {
+				"id": 3834090
+			}
+		}
+	}
+]

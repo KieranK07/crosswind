@@ -1,4 +1,4 @@
-name: Build (macOS)
+name: Build (macOS and Windows)
 
 on:
   push:
@@ -7,7 +7,20 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Universal: runs on Apple Silicon and Intel Macs
+          - platform: macos-latest
+            args: '--target universal-apple-darwin --bundles app'
+            targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+            bundle: 'src-tauri/target/universal-apple-darwin/release/bundle'
+          - platform: windows-latest
+            args: '--bundles nsis'
+            bundle: 'src-tauri/target/release/bundle'
+
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
 
@@ -22,22 +35,24 @@ jobs:
 
       - run: pnpm install
 
-      # Universal: runs on Apple Silicon and Intel Macs
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+          targets: ${{ matrix.targets }}
 
-      - run: pnpm tauri build --target universal-apple-darwin --bundles app
+      - run: pnpm tauri build ${{ matrix.args }}
 
       # Not notarized: ad-hoc signed, so macOS asks once (Privacy & Security > Open Anyway)
-      - name: Package the app
+      - name: Package the macOS app
+        if: runner.os == 'macOS'
         run: |
-          cd src-tauri/target/universal-apple-darwin/release/bundle/macos
+          cd ${{ matrix.bundle }}/macos
           archs=$(lipo -archs Crosswind.app/Contents/MacOS/*) && [[ $archs == *x86_64* && $archs == *arm64* ]]
           codesign --force --deep -s - Crosswind.app
           ditto -c -k --keepParent Crosswind.app Crosswind-macOS.zip
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Crosswind-macOS
-          path: src-tauri/target/universal-apple-darwin/release/bundle/macos/Crosswind-macOS.zip
+          name: Crosswind-${{ runner.os }}
+          path: |
+            ${{ matrix.bundle }}/macos/Crosswind-macOS.zip
+            ${{ matrix.bundle }}/nsis/*.exe

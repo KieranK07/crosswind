@@ -25,8 +25,13 @@ use crate::{
 pub mod mod_loader;
 pub mod platform;
 
-// not Gale's games.json: an older Crosswind cached the list with every game in it
-pub const CACHE_FILE_NAME: &str = "mac-games.json";
+// On a Mac, only the games whose Steam version runs on one (mac_only), under another name than Gale's:
+// an older Crosswind cached every game as games.json.
+pub const CACHE_FILE_NAME: &str = if cfg!(target_os = "macos") {
+    "mac-games.json"
+} else {
+    "games.json"
+};
 
 const GITHUB_API_URL: &str =
     "https://api.github.com/repos/Kesomannen/gale/commits?path=src-tauri/games.json&per_page=1";
@@ -34,7 +39,11 @@ const GAMES_JSON_URL: &str =
     "https://raw.githubusercontent.com/Kesomannen/gale/refs/heads/master/src-tauri/games.json";
 const STEAM_ITEMS_URL: &str = "https://api.steampowered.com/IStoreBrowseService/GetItems/v1/";
 
-const BUNDLED_GAMES_JSON: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"));
+const BUNDLED_GAMES_JSON: &str = if cfg!(target_os = "macos") {
+    include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/mac-games.json"))
+} else {
+    include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"))
+};
 
 const BUILD_TIME: &str = env!("BUILD_TIME");
 
@@ -92,7 +101,10 @@ pub async fn update_list_task(app: &AppHandle) -> Result<()> {
         .text()
         .await?;
 
-    let games = mac_only(app.http(), serde_json::from_str(&str)?).await?;
+    let mut games: Vec<GameData<'_>> = serde_json::from_str(&str)?;
+    if cfg!(target_os = "macos") {
+        games = mac_only(app.http(), games).await?;
+    }
 
     let date = get_last_commit_date(app).await.unwrap_or_else(|err| {
         warn!("failed to get last commit date: {err}");
@@ -109,8 +121,8 @@ pub async fn update_list_task(app: &AppHandle) -> Result<()> {
     Ok(())
 }
 
-/// The games whose Steam store page lists macOS: Crosswind is a Mac mod manager. Gale's list has
-/// every game Thunderstore supports.
+/// The games whose Steam store page lists macOS, for the Mac version. Gale's list has every game
+/// Thunderstore supports.
 async fn mac_only<'a>(
     http: &reqwest_middleware::ClientWithMiddleware,
     games: Vec<GameData<'a>>,
@@ -298,7 +310,7 @@ impl Hash for GameData<'_> {
 mod tests {
     use super::*;
 
-    /// Rewrites the bundled games.json (used until the first update) from Gale's current list:
+    /// Rewrites the Mac's bundled mac-games.json (used until the first update) from Gale's current list:
     /// `cargo test --lib write_bundled_games -- --ignored`
     #[tokio::test]
     #[ignore]
@@ -335,7 +347,7 @@ mod tests {
             ))
             .unwrap();
         json.push(b'\n');
-        fs::write(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"), json).unwrap();
+        fs::write(concat!(env!("CARGO_MANIFEST_DIR"), "/mac-games.json"), json).unwrap();
         println!("{} Mac games", games.len());
     }
 }
