@@ -115,3 +115,7 @@ opt-level = "z"
 codegen-units = 1
 strip = true
 lto = true
+
+[dev-dependencies]
+# write_bundled_games keeps the key order of Gale's games.json
+serde_json = { version = "1", features = ["preserve_order"] }

@@ -554,8 +554,6 @@ impl ManagedGame {
 
 impl ModManager {
     pub fn create(data: db::SaveData, prefs: &Prefs, db: &Db) -> Result<Self> {
-        const DEFAULT_GAME_SLUG: &str = "among-us";
-
         let db::SaveData {
             manager,
             games,
@@ -565,7 +563,7 @@ impl ModManager {
         let active_game = manager
             .active_game_slug
             .and_then(|slug| game::from_slug(&slug))
-            .unwrap_or_else(|| game::from_slug(DEFAULT_GAME_SLUG).unwrap());
+            .unwrap_or_else(|| game::list().next().unwrap());
 
         let mut manager = Self {
             active_game,

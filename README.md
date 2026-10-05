@@ -1,38 +1,21 @@
 # Crosswind
 
-[![ROUNDS: tested](https://img.shields.io/badge/ROUNDS-tested-2ea44f?style=flat)](#what-it-does)
-[![Other games: untested](https://img.shields.io/badge/other_games-untested-lightgrey?style=flat)](#crosswind)
 [![GitHub License](https://img.shields.io/github/license/KieranK07/crosswind?style=flat)](LICENSE)
 
-A Thunderstore mod manager for Mac and Windows, made for ROUNDS mods. It's a fork of [Gale](https://github.com/Kesomannen/gale) by Kesomannen, not Gale itself, so please don't ask Gale's developer for help with it.
+A Thunderstore mod manager for Mac. It lists the games whose Steam page says they run on a Mac, and checks again
+each time it opens, so new Thunderstore games show up by themselves. It's a fork of [Gale](https://github.com/Kesomannen/gale)
+by Kesomannen, not Gale itself, so please don't ask Gale's developer for help with it.
 
-> [!NOTE]
-> Only ROUNDS is tested so far. Other games are listed because Gale lists them, and may not work, especially on a Mac.
-
-## ROUNDS mods on a Mac (and Windows)
-
-No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac version, which is why Steam keeps putting a Mac back on the newest ROUNDS. Crosswind makes ROUNDS mods built for the old game work on the current version instead.
-
-### On a Mac (Apple Silicon or Intel)
+## Install
 
 1. Download **Crosswind-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Crosswind** into Applications.
 2. Open Crosswind. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
-3. Choose **ROUNDS**, make a profile and install **DuctTape** plus your mods (UnboundLib, RoundsWithFriends, card packs...).
+3. Choose a game, make a profile and install mods.
 4. With Steam open, press **Launch**.
 
-### Playing with friends on Windows
+Runs on Apple Silicon and Intel. Games that use BepInEx get a Mac build of it; other mod loaders may not run on a Mac.
 
-Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Mac can't run the old beta. So your friends play on the current version too:
-
-1. Steam → right-click ROUNDS → **Properties → Betas → None** (leave `old-rounds-for-mods`).
-2. Download **Crosswind-Windows-setup.exe** from [Releases](../../releases/latest) and run it. If Windows says it protected your PC, click **More info → Run anyway**. It installs next to Gale or r2modman and doesn't touch them.
-3. Share your mods: in Crosswind, **Export → ...profile as code**, and they use **Import → ...profile from code**.
-
-### What it does
-
-Crosswind runs BepInEx on a Mac, which Thunderstore's BepInEx can't do. [DuctTape](https://github.com/KieranK07/DuctTape), a normal mod, puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends and fixes the other mods for the current game. Without it, old mods crash the game. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
-
-Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows).
+Building it yourself: `pnpm install && pnpm tauri build --bundles app`.
 
 Everything below is Gale's own README.
 

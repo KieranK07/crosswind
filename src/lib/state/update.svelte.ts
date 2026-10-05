@@ -6,7 +6,7 @@ class UpdateState {
 	isChecking = $state(false);
 
 	refresh = async () => {
-		// This fork has no update feed: upstream's would replace it with Gale without macOS and ROUNDS support.
+		// This fork has no update feed: upstream's would replace it with Gale without macOS support.
 	};
 }
 

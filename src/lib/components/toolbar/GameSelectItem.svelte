@@ -41,20 +41,6 @@
 					class="inline h-4"
 				/>
 			{/if}
-
-			{#if game.slug === 'rounds'}
-				<span
-					title={m.gameSelect_tested_title()}
-					class="bg-accent-600 ml-1 rounded-sm px-1.5 py-0.5 text-xs font-medium text-white"
-					>{m.gameSelect_tested()}</span
-				>
-			{:else}
-				<span
-					title={m.gameSelect_untested_title()}
-					class="dark:bg-primary-600 bg-primary-200 text-primary-600 dark:text-primary-300 ml-1 rounded-sm px-1.5 py-0.5 text-xs"
-					>{m.gameSelect_untested()}</span
-				>
-			{/if}
 		</div>
 
 		<div class="text-primary-500 dark:text-primary-400">

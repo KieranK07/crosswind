@@ -1,5 +1,5 @@
 fn main() {
-    // files embedded with include_dir! (macOS BepInEx, the ROUNDS layer)
+    // files embedded with include_dir! (the macOS BepInEx)
     println!("cargo:rerun-if-changed=resources");
 
     println!(

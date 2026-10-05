@@ -1,12 +1,13 @@
 use std::{
     borrow::Cow,
+    collections::HashSet,
     fs,
     hash::{self, Hash},
     sync::LazyLock,
 };
 
 use chrono::{DateTime, Utc};
-use eyre::{OptionExt, Result};
+use eyre::{OptionExt, Result, ensure};
 use heck::{ToKebabCase, ToPascalCase};
 use serde::{Deserialize, Serialize};
 
@@ -24,12 +25,14 @@ use crate::{
 pub mod mod_loader;
 pub mod platform;
 
-pub const CACHE_FILE_NAME: &str = "games.json";
+// not Gale's games.json: an older Crosswind cached the list with every game in it
+pub const CACHE_FILE_NAME: &str = "mac-games.json";
 
 const GITHUB_API_URL: &str =
     "https://api.github.com/repos/Kesomannen/gale/commits?path=src-tauri/games.json&per_page=1";
 const GAMES_JSON_URL: &str =
     "https://raw.githubusercontent.com/Kesomannen/gale/refs/heads/master/src-tauri/games.json";
+const STEAM_ITEMS_URL: &str = "https://api.steampowered.com/IStoreBrowseService/GetItems/v1/";
 
 const BUNDLED_GAMES_JSON: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"));
 
@@ -89,7 +92,7 @@ pub async fn update_list_task(app: &AppHandle) -> Result<()> {
         .text()
         .await?;
 
-    let games: Vec<GameData<'_>> = serde_json::from_str(&str)?;
+    let games = mac_only(app.http(), serde_json::from_str(&str)?).await?;
 
     let date = get_last_commit_date(app).await.unwrap_or_else(|err| {
         warn!("failed to get last commit date: {err}");
@@ -104,6 +107,53 @@ pub async fn update_list_task(app: &AppHandle) -> Result<()> {
     info!("updated games list from github, last commit at {date}");
 
     Ok(())
+}
+
+/// The games whose Steam store page lists macOS: Crosswind is a Mac mod manager. Gale's list has
+/// every game Thunderstore supports.
+async fn mac_only<'a>(
+    http: &reqwest_middleware::ClientWithMiddleware,
+    games: Vec<GameData<'a>>,
+) -> Result<Vec<GameData<'a>>> {
+    let ids: Vec<_> = games
+        .iter()
+        .filter_map(|game| game.platforms.steam.as_ref())
+        .map(|steam| serde_json::json!({ "appid": steam.id }))
+        .collect();
+    let input = serde_json::json!({
+        "ids": ids,
+        "context": { "language": "english", "country_code": "US" },
+        "data_request": { "include_platforms": true },
+    });
+
+    let url =
+        reqwest::Url::parse_with_params(STEAM_ITEMS_URL, [("input_json", input.to_string())])?;
+    let response: serde_json::Value = http
+        .get(url)
+        .send()
+        .await?
+        .error_for_status()?
+        .json()
+        .await?;
+
+    let mac: HashSet<u64> = response["response"]["store_items"]
+        .as_array()
+        .ok_or_eyre("unexpected response from Steam")?
+        .iter()
+        .filter(|item| item["platforms"]["mac"] == true)
+        .filter_map(|item| item["appid"].as_u64())
+        .collect();
+    ensure!(!mac.is_empty(), "Steam listed no Mac games");
+
+    Ok(games
+        .into_iter()
+        .filter(|game| {
+            game.platforms
+                .steam
+                .as_ref()
+                .is_some_and(|steam| mac.contains(&u64::from(steam.id)))
+        })
+        .collect())
 }
 
 async fn get_last_commit_date(app: &AppHandle) -> Result<DateTime<Utc>> {
@@ -241,5 +291,51 @@ impl Eq for GameData<'_> {}
 impl Hash for GameData<'_> {
     fn hash<H: hash::Hasher>(&self, state: &mut H) {
         self.slug.hash(state);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Rewrites the bundled games.json (used until the first update) from Gale's current list:
+    /// `cargo test --lib write_bundled_games -- --ignored`
+    #[tokio::test]
+    #[ignore]
+    async fn write_bundled_games() {
+        let http = reqwest_middleware::ClientBuilder::new(reqwest::Client::new()).build();
+        let text = http
+            .get(GAMES_JSON_URL)
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap();
+
+        let mac: HashSet<_> = mac_only(&http, serde_json::from_str(&text).unwrap())
+            .await
+            .unwrap()
+            .into_iter()
+            .map(|game| game.name)
+            .collect();
+        // in Gale's own format
+        let games: Vec<serde_json::Value> = serde_json::from_str(&text).unwrap();
+        let games: Vec<_> = games
+            .into_iter()
+            .filter(|game| game["name"].as_str().is_some_and(|name| mac.contains(name)))
+            .collect();
+
+        // tabs, like Gale's
+        let mut json = Vec::new();
+        let format = serde_json::ser::PrettyFormatter::with_indent(b"\t");
+        games
+            .serialize(&mut serde_json::Serializer::with_formatter(
+                &mut json, format,
+            ))
+            .unwrap();
+        json.push(b'\n');
+        fs::write(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"), json).unwrap();
+        println!("{} Mac games", games.len());
     }
 }

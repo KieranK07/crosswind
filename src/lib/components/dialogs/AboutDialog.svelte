@@ -36,8 +36,6 @@
 			{m.aboutDialog_version({ version: version })}
 			<br />
 			GNU General Public License v3.0
-			<br />
-			Only ROUNDS is tested so far.
 		</p>
 		<div class="mt-3 flex items-center gap-2">
 			<Icon icon="mdi:github" class="text-primary-900 text-xl dark:text-white" />
