@@ -39,21 +39,7 @@ jobs:
         with:
           targets: ${{ matrix.targets }}
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - run: pnpm tauri build ${{ matrix.args }}
-
-      # The ROUNDS layer on a real Thunderstore profile, on this OS
-      - name: Test the ROUNDS layer
-        shell: bash
-        run: |
-          python scripts/rounds-test-profile.py "$RUNNER_TEMP/rounds/profile"
-          export ROUNDS_TEST_PROFILE="$RUNNER_TEMP/rounds/profile"
-          cd src-tauri
-          cargo test --release --lib rounds::tests::updates_a_thunderstore_profile -- --ignored --exact --nocapture
-          cargo test --release --lib rounds::tests::packages_win -- --ignored --exact --nocapture
 
       # Not notarized: ad-hoc signed, so macOS asks once (Privacy & Security > Open Anyway)
       - name: Package the macOS app

@@ -15,7 +15,6 @@ mod game;
 mod logger;
 mod prefs;
 mod profile;
-mod rounds;
 mod state;
 mod thunderstore;
 mod util;

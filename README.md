@@ -17,7 +17,7 @@ No Windows emulator, and no `old-rounds-for-mods` beta: that beta has no Mac ver
 
 1. Download **Crosswind-macOS.zip** from [Releases](../../releases/latest), unzip it and drag **Crosswind** into Applications.
 2. Open Crosswind. The first time, macOS blocks it because it isn't from the App Store: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
-3. Choose **ROUNDS**, make a profile and install mods as usual (UnboundLib, RoundsWithFriends, card packs...).
+3. Choose **ROUNDS**, make a profile and install **DuctTape** plus your mods (UnboundLib, RoundsWithFriends, card packs...).
 4. With Steam open, press **Launch**.
 
 ### Playing with friends on Windows
@@ -30,9 +30,9 @@ Everyone in a lobby needs the same version of ROUNDS and the same mods, and a Ma
 
 ### What it does
 
-Before ROUNDS starts, Crosswind puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends in place of the old ones, and fixes the other mods for the current game with [DuctTape](https://github.com/KieranK07/DuctTape). If you install an updated UnboundLib or RoundsWithFriends yourself, Crosswind uses yours. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
+Crosswind runs BepInEx on a Mac, which Thunderstore's BepInEx can't do. [DuctTape](https://github.com/KieranK07/DuctTape), a normal mod, puts in [Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends and fixes the other mods for the current game. Without it, old mods crash the game. The 98 most-downloaded mods were played in real matches: see the [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md). A mod still broken? Open an issue with its name and the log (**File → Open profile folder**, then `BepInEx/LogOutput.log`).
 
-Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows). After DuctTape or the [toolkit](https://github.com/KieranK07/rounds-porting-toolkit) changes, `python scripts/rounds-sync.py` copies their files into `src-tauri/resources/rounds` first.
+Building it yourself: `pnpm install && pnpm tauri build --bundles app` (Mac) or `--bundles nsis` (Windows).
 
 Everything below is Gale's own README.
 

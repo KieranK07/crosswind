@@ -104,29 +104,6 @@ impl Cli {
                     error!("failed to install mod from cli: {:#}", err);
                 }
 
-                if launch && !vanilla
-                    && let Err(err) = crate::rounds::prepare(&handle).await
-                {
-                    error!("{:#}", err);
-                }
-
-                let manager = handle.lock_manager();
-                if let Err(err) =
-                    handle_launch_and_no_gui(launch, no_gui, vanilla, &manager, &handle)
-                {
-                    error!("{:#}", err);
-                }
-            });
-        } else if launch && !vanilla {
-            // ROUNDS profiles are brought up to date first, which may download files.
-            drop(manager);
-
-            let handle = app.to_owned();
-            tauri::async_runtime::spawn(async move {
-                if let Err(err) = crate::rounds::prepare(&handle).await {
-                    error!("{:#}", err);
-                }
-
                 let manager = handle.lock_manager();
                 if let Err(err) =
                     handle_launch_and_no_gui(launch, no_gui, vanilla, &manager, &handle)

@@ -98,8 +98,6 @@ cacache = { version = "13.1", default-features = false, features = [
     "tokio-runtime",
     "mmap",
 ] }
-sha2 = "0.11.0"
-qbsdiff = "1.4.4"
 
 [target.'cfg(target_os="windows")'.dependencies]
 windows = { version = "0.62", features = ["UI", "UI_ViewManagement"] }
